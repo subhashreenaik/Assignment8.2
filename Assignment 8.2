@@ -1,0 +1,40 @@
+A = load 'a.txt' using PigStorage(',') as (name:chararray);
+concatB = foreach B generate CONCAT(name,'hello');
+dump concatB;
+
+
+A = load 'a.txt' using PigStorage(',') as (id:int, name:chararray, age:int,  city:chararray);
+student_tokenize = foreach A  Generate TOKENIZE(name);
+dump student_tokenize;
+
+employee_data  = load 'a.txt' using PigStorage(',') as (id:int, name:chararray, workdate:chararray, daily_typing_pages:int);
+employee_group = Group employee_data all;
+student_workpages_sum = foreach employee_group Generate (employee_data.name,employee_data.daily_typing_pages),SUM(employee_data.daily_typing_pages);
+dump student_workpages_sum;
+
+student_details  = load 'a.txt' using PigStorage(',') as (id:int, firstname:chararray, lastname:chararray, age:int, phone:chararray, city:chararray, gpa:int);
+student_group_all = Group student_details All;
+student_gpa_min = foreach student_group_all  Generate (student_details.firstname, student_details.gpa), MIN(student_details.gpa);
+dump student_gpa_min;
+
+student_details  = load 'a.txt' using PigStorage(',') as (id:int, firstname:chararray, lastname:chararray, age:int, phone:chararray, city:chararray, gpa:int);
+student_group_all = Group student_details All;
+student_gpa_max = foreach student_group_all  Generate (student_details.firstname, student_details.gpa), MAX(student_details.gpa);
+dump student_gpa_max;
+
+A = load 'a.txt' using PigStorage(',') as (name:chararray);
+LimitA = LIMIT A 5;
+dump LimitA;
+
+A = load 'a.txt' using PigStorage(',') as (name:chararray);
+store A into 'b.pigout';
+
+A = load 'a.txt' using PigStorage(',') as (name:chararray);
+distinct = distinct A;
+dump A;
+
+A = load 'a.txt' using PigStorage(',') as (id:int, name:chararray, age:int,  city:chararray);
+B = Group A all;
+C = foreach B flatten(group);
+dump C;
+
